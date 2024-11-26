@@ -1,0 +1,6 @@
+const CONSTANTS = {
+  SCREEN_WIDTH: 730,
+  SCREEN_HEIGHT: 456,
+};
+
+export default CONSTANTS;
