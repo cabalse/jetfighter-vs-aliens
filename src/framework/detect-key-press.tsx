@@ -1,32 +1,17 @@
 import { useEffect } from "react";
 
 type Props = {
-  onMovingLeft: (value: boolean) => void;
-  onMovingRight: (value: boolean) => void;
-  onBombDrop: () => void;
+  onKeyPress: (key: string, value: boolean) => void;
 };
 
-const DetectKeyPress = ({ onMovingLeft, onMovingRight, onBombDrop }: Props) => {
+const DetectKeyPress = ({ onKeyPress }: Props) => {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "a") {
-        onMovingLeft(true);
-      }
-      if (event.key === "d") {
-        onMovingRight(true);
-      }
+      onKeyPress(event.key, true);
     };
 
     const handleKeyUp = (event: KeyboardEvent) => {
-      if (event.key === "a") {
-        onMovingLeft(false);
-      }
-      if (event.key === "d") {
-        onMovingRight(false);
-      }
-      if (event.key === " ") {
-        onBombDrop();
-      }
+      onKeyPress(event.key, false);
     };
 
     window.addEventListener("keydown", handleKeyDown);

@@ -9,20 +9,41 @@ import Burner from "./burner";
 import jetFighter from "../../assets/player/jet-top-down-grey.png";
 
 const scale = 75;
+const rotationSpeed = 0.15;
 
-const Player = () => {
+type Props = {
+  rotateRight: boolean;
+  rotateLeft: boolean;
+  onAngleChange: (angle: number) => void;
+};
+
+const Player = ({ rotateRight, rotateLeft, onAngleChange }: Props) => {
   const groupRef = useRef<THREE.Group>(null);
   const [jetTexture, ratio, width, height] = useTexture(jetFighter);
 
-  // Rotation
+  const reportCurrentAngle = () => {
+    if (groupRef.current) {
+      const angleInRadians = groupRef.current.rotation.z;
+      const normalizedAngle = angleInRadians % (2 * Math.PI);
+      onAngleChange(normalizedAngle);
+    }
+  };
+
   useFrame(() => {
     if (groupRef.current) {
-      groupRef.current.rotation.z += 0.1;
+      if (rotateRight) {
+        groupRef.current.rotation.z -= rotationSpeed;
+        reportCurrentAngle();
+      }
+      if (rotateLeft) {
+        groupRef.current.rotation.z += rotationSpeed;
+        reportCurrentAngle();
+      }
     }
   });
 
   return (
-    <group ref={groupRef} position={[200, 0, 0]} rotation={[0, 0, 0]}>
+    <group ref={groupRef} position={[0, 0, 0]} rotation={[0, 0, 0]}>
       <ScreenObject
         dimensions={{ width: width, height: height }}
         position={[0, 0, 0]}
