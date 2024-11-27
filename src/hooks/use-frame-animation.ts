@@ -4,10 +4,16 @@ import { useFrame } from "@react-three/fiber";
 import { Texture } from "three";
 import ANIMATION_NAMES from "../constants/animation-names";
 
+enum ANIMATION_STATE {
+  PLAYING,
+  STOPPED,
+}
+
 const useFrameAnimation = (
   animations: Animation[],
   defaultAnimation: ANIMATION_NAMES,
-  animationFrameSpeed: number
+  animationFrameSpeed: number,
+  onAnimAtionCycleEnd?: () => void
 ): [
   () => Texture,
   (animationName: ANIMATION_NAMES) => void,
@@ -18,6 +24,9 @@ const useFrameAnimation = (
   const [currentAnimationName, setCurrentAnimationName] =
     useState<ANIMATION_NAMES>(defaultAnimation); // Current animation name
   const [currentFrame, setCurrentFrame] = useState<number>(0); // Current frame of the current animation
+  const [animationState, setAnimationState] = useState<ANIMATION_STATE>(
+    ANIMATION_STATE.PLAYING
+  );
 
   useEffect(() => {
     const defaultAnimationFrames = animationFrames.find(
@@ -29,10 +38,23 @@ const useFrameAnimation = (
   }, [animationFrames, defaultAnimation]);
 
   useFrame((state) => {
-    const time = state.clock.getElapsedTime();
-    const newFrame =
-      Math.floor(time / animationFrameSpeed) % currentAnimation.length;
-    setCurrentFrame(newFrame);
+    switch (animationState) {
+      case ANIMATION_STATE.PLAYING: {
+        const time = state.clock.getElapsedTime();
+        const newFrame =
+          Math.floor(time / animationFrameSpeed) % currentAnimation.length;
+
+        if (newFrame === currentAnimation.length - 1 && onAnimAtionCycleEnd)
+          onAnimAtionCycleEnd();
+
+        setCurrentFrame(newFrame);
+        break;
+      }
+
+      case ANIMATION_STATE.STOPPED:
+        setCurrentFrame(0);
+        break;
+    }
   });
 
   const setAnimation = (animationName: ANIMATION_NAMES) => {

@@ -16,6 +16,9 @@ type Props = {
   animationFrames: Animation[];
   animationFrameSpeed: number;
   detection?: System<Body>;
+  beginAnimation?: boolean;
+  onAnimationEnd?: () => void;
+  onAnimationCycleEnd?: () => void;
 };
 
 const AnimatedScreenObject = ({
@@ -27,12 +30,16 @@ const AnimatedScreenObject = ({
   animation,
   animationFrameSpeed,
   detection,
+  beginAnimation = true,
+  onAnimationEnd,
+  onAnimationCycleEnd,
 }: Props) => {
   const [, setDetectionZone] = useState<Box>();
   const [getCurrentFrame] = useFrameAnimation(
     animationFrames,
     animation,
-    animationFrameSpeed
+    animationFrameSpeed,
+    onAnimationCycleEnd
   );
 
   const calcDetectCoords = useToDetectCoords(

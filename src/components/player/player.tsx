@@ -7,17 +7,27 @@ import ScreenObject from "../../framework/screen-object";
 import Burner from "./burner";
 
 import jetFighter from "../../assets/player/jet-top-down-grey.png";
+import CONSTANTS from "../../constants";
+import Lightning from "./ligtning";
 
 const scale = 75;
-const rotationSpeed = 0.15;
+const rotationSpeed = 0.04;
 
 type Props = {
   rotateRight: boolean;
   rotateLeft: boolean;
   onAngleChange: (angle: number) => void;
+  fire: boolean;
+  onFired: () => void;
 };
 
-const Player = ({ rotateRight, rotateLeft, onAngleChange }: Props) => {
+const Player = ({
+  rotateRight,
+  rotateLeft,
+  onAngleChange,
+  fire,
+  onFired,
+}: Props) => {
   const groupRef = useRef<THREE.Group>(null);
   const [jetTexture, ratio, width, height] = useTexture(jetFighter);
 
@@ -45,9 +55,10 @@ const Player = ({ rotateRight, rotateLeft, onAngleChange }: Props) => {
   return (
     <group ref={groupRef} position={[0, 0, 0]} rotation={[0, 0, 0]}>
       <group position={[0, 0, 0]}>
+        <Lightning show={fire} onShown={onFired} />
         <ScreenObject
           dimensions={{ width: width, height: height }}
-          position={[0, 0, 0]}
+          position={[0, 0, CONSTANTS.Z_POSITION.PLAYER]}
           scale={scale}
           texture={jetTexture}
           textureRatio={ratio}

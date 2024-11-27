@@ -5,10 +5,10 @@ import "./app.css";
 import CONSTANTS from "./constants";
 import Player from "./components/player/player";
 import DetectKeyPress from "./framework/detect-key-press";
-import Background from "./components/background";
+import Background from "./components/background/background";
 import angleToVector from "./utilities/angle-to-vector";
 
-const speed = 0;
+const speed = 4;
 
 function App() {
   const ref = useRef<HTMLCanvasElement | null>(null);
