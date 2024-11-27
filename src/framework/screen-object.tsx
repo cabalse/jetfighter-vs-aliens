@@ -49,7 +49,7 @@ const ScreenObject = ({
   }, []);
 
   return (
-    <mesh>
+    <mesh position={position}>
       <planeGeometry args={[textureRatio * scale, scale]} />
       <meshBasicMaterial map={texture} transparent={true} />
     </mesh>

@@ -8,7 +8,7 @@ import DetectKeyPress from "./framework/detect-key-press";
 import Background from "./components/background";
 import angleToVector from "./utilities/angle-to-vector";
 
-const speed = 5;
+const speed = 0;
 
 function App() {
   const ref = useRef<HTMLCanvasElement | null>(null);
@@ -45,9 +45,8 @@ function App() {
             }
           />
           <Background
-            move={playeControls.moveForward}
-            movementX={backgroundMovement.x}
-            movementY={backgroundMovement.y}
+            movementX={-backgroundMovement.x}
+            movementY={-backgroundMovement.y}
           />
         </Canvas>
       </div>

@@ -44,14 +44,16 @@ const Player = ({ rotateRight, rotateLeft, onAngleChange }: Props) => {
 
   return (
     <group ref={groupRef} position={[0, 0, 0]} rotation={[0, 0, 0]}>
-      <ScreenObject
-        dimensions={{ width: width, height: height }}
-        position={[0, 0, 0]}
-        scale={scale}
-        texture={jetTexture}
-        textureRatio={ratio}
-      />
-      <Burner />
+      <group position={[0, 0, 0]}>
+        <ScreenObject
+          dimensions={{ width: width, height: height }}
+          position={[0, 0, 0]}
+          scale={scale}
+          texture={jetTexture}
+          textureRatio={ratio}
+        />
+        <Burner />
+      </group>
     </group>
   );
 };

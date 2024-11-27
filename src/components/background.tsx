@@ -1,23 +1,28 @@
 import { useFrame } from "@react-three/fiber";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 
 import useTexture from "../hooks/use-texture";
 
 import cloud1 from "../assets/clouds/cloud-1.png";
 import ScreenObject from "../framework/screen-object";
+import generateRandomCoordinates from "../utilities/generate-random-coordinates";
 
 const scale = 75;
 
 type Props = {
-  move: boolean;
   movementX: number;
   movementY: number;
 };
 
-const Background = ({ move, movementX, movementY }: Props) => {
+const Background = ({ movementX, movementY }: Props) => {
   const groupRef = useRef<THREE.Group>(null);
   const [cloud1Texture, ratio, width, height] = useTexture(cloud1);
+  const [clouds, setClouds] = useState<{ x: number; y: number }[]>([]);
+
+  useEffect(() => {
+    setClouds(generateRandomCoordinates(500, 500, 50, 100, 50));
+  }, []);
 
   useFrame(() => {
     if (groupRef.current) {
@@ -28,13 +33,15 @@ const Background = ({ move, movementX, movementY }: Props) => {
 
   return (
     <group ref={groupRef} position={[0, 0, 0]} rotation={[0, 0, 0]}>
-      <ScreenObject
-        dimensions={{ width: width, height: height }}
-        position={[0, 0, 0]}
-        scale={scale}
-        texture={cloud1Texture}
-        textureRatio={ratio}
-      />
+      {clouds.map((cloud: { x: number; y: number }) => (
+        <ScreenObject
+          dimensions={{ width: width, height: height }}
+          position={[cloud.x, cloud.y, 0]}
+          scale={scale}
+          texture={cloud1Texture}
+          textureRatio={ratio}
+        />
+      ))}
     </group>
   );
 };
