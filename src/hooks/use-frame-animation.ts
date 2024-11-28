@@ -44,10 +44,15 @@ const useFrameAnimation = (
         const newFrame =
           Math.floor(time / animationFrameSpeed) % currentAnimation.length;
 
-        if (newFrame === currentAnimation.length - 1 && onAnimAtionCycleEnd)
-          onAnimAtionCycleEnd();
-
-        setCurrentFrame(newFrame);
+        setCurrentFrame((prev) => {
+          if (
+            newFrame != prev &&
+            newFrame === currentAnimation.length - 1 &&
+            onAnimAtionCycleEnd
+          )
+            onAnimAtionCycleEnd();
+          return newFrame;
+        });
         break;
       }
 

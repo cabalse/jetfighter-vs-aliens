@@ -11,7 +11,6 @@ import CONSTANTS from "../../constants";
 import Lightning from "./ligtning";
 
 const scale = 75;
-const rotationSpeed = 0.04;
 
 type Props = {
   rotateRight: boolean;
@@ -34,19 +33,19 @@ const Player = ({
   const reportCurrentAngle = () => {
     if (groupRef.current) {
       const angleInRadians = groupRef.current.rotation.z;
-      const normalizedAngle = angleInRadians % (2 * Math.PI);
+      const normalizedAngle = angleInRadians % (2 * Math.PI); // 90 degrees
       onAngleChange(normalizedAngle);
     }
   };
 
-  useFrame(() => {
+  useFrame((state, delta) => {
     if (groupRef.current) {
       if (rotateRight) {
-        groupRef.current.rotation.z -= rotationSpeed;
+        groupRef.current.rotation.z -= CONSTANTS.MOVEMENT.PLAYER.TURN * delta;
         reportCurrentAngle();
       }
       if (rotateLeft) {
-        groupRef.current.rotation.z += rotationSpeed;
+        groupRef.current.rotation.z += CONSTANTS.MOVEMENT.PLAYER.TURN * delta;
         reportCurrentAngle();
       }
     }
@@ -55,7 +54,7 @@ const Player = ({
   return (
     <group ref={groupRef} position={[0, 0, 0]} rotation={[0, 0, 0]}>
       <group position={[0, 0, 0]}>
-        <Lightning show={fire} onShown={onFired} />
+        <Lightning show={fire} onAnimationCycleEnd={onFired} />
         <ScreenObject
           dimensions={{ width: width, height: height }}
           position={[0, 0, CONSTANTS.Z_POSITION.PLAYER]}

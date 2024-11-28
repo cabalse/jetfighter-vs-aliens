@@ -1,6 +1,20 @@
 const CONSTANTS = {
   SCREEN_WIDTH: 730,
   SCREEN_HEIGHT: 456,
+  ANIMATION_SPEED: {
+    BURNER: 0.1,
+    LIGHTNING: 0.05,
+  },
+  MOVEMENT: {
+    PLAYER: {
+      SPEED: 500,
+      TURN: 4,
+    },
+    ENEMIES: {
+      SPEED: 1,
+      TURN: 1,
+    },
+  },
   Z_POSITION: {
     PLAYER: 0.5,
     ENEMIES: 0.4,

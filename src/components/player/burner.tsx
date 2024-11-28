@@ -11,7 +11,6 @@ import burner06 from "../../assets/player/burner/jet_burner_frame_6.png";
 import CONSTANTS from "../../constants";
 
 const scale = 15;
-const animationFrameSpeed = 2; // 0.07;
 
 const Burner = () => {
   const [b01, frameRatio, width, height] = useTexture(burner01);
@@ -28,6 +27,7 @@ const Burner = () => {
     },
   ];
 
+  // Place at the end of the plane
   return (
     <group position={[-67, -4, 0]}>
       <AnimatedScreenObject
@@ -37,10 +37,7 @@ const Burner = () => {
         animationFrames={animations}
         textureRatio={frameRatio}
         animation={ANIMATION_NAMES.IDLE}
-        animationFrameSpeed={animationFrameSpeed}
-        onAnimationCycleEnd={() => {
-          console.log("Burner animation cycle end");
-        }}
+        animationFrameSpeed={CONSTANTS.ANIMATION_SPEED.BURNER}
       />
       <AnimatedScreenObject
         dimensions={{ width: width, height: height }}
@@ -49,7 +46,7 @@ const Burner = () => {
         animationFrames={animations}
         textureRatio={frameRatio}
         animation={ANIMATION_NAMES.IDLE}
-        animationFrameSpeed={animationFrameSpeed}
+        animationFrameSpeed={CONSTANTS.ANIMATION_SPEED.BURNER}
       />
     </group>
   );

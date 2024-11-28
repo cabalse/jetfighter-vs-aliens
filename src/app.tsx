@@ -8,14 +8,13 @@ import DetectKeyPress from "./framework/detect-key-press";
 import Background from "./components/background/background";
 import angleToVector from "./utilities/angle-to-vector";
 
-const speed = 4;
-
 function App() {
   const ref = useRef<HTMLCanvasElement | null>(null);
   const [playeControls, setPlayerControls] = useState({
     rotateRight: false,
     rotateLeft: false,
     moveForward: false,
+    fire: false,
   });
   const [backgroundMovement, setBackgroundMovement] = useState<{
     x: number;
@@ -33,6 +32,8 @@ function App() {
               setPlayerControls((prev) => ({ ...prev, rotateRight: value }));
             if (key === "w")
               setPlayerControls((prev) => ({ ...prev, moveForward: value }));
+            if (key === " ")
+              setPlayerControls((prev) => ({ ...prev, fire: true }));
           }}
         />
         <Canvas orthographic={true}>
@@ -41,7 +42,13 @@ function App() {
             rotateLeft={playeControls.rotateLeft}
             rotateRight={playeControls.rotateRight}
             onAngleChange={(angle) =>
-              setBackgroundMovement(angleToVector(angle, speed))
+              setBackgroundMovement(
+                angleToVector(angle, CONSTANTS.MOVEMENT.PLAYER.SPEED)
+              )
+            }
+            fire={playeControls.fire}
+            onFired={() =>
+              setPlayerControls((prev) => ({ ...prev, fire: false }))
             }
           />
           <Background

@@ -12,10 +12,10 @@ type Props = {
 const Background = ({ movementX, movementY }: Props) => {
   const groupRef = useRef<THREE.Group>(null);
 
-  useFrame(() => {
+  useFrame((state, delta) => {
     if (groupRef.current) {
-      groupRef.current.position.x += movementX;
-      groupRef.current.position.y += movementY;
+      groupRef.current.position.x += movementX * delta;
+      groupRef.current.position.y += movementY * delta;
     }
   });
 

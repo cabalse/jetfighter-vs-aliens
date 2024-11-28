@@ -12,14 +12,13 @@ import lightning6 from "../../assets/lightning/lightning-6.png";
 import CONSTANTS from "../../constants";
 
 const scale = 400;
-const animationFrameSpeed = 0.07;
 
 type Props = {
   show: boolean;
-  onShown: () => void;
+  onAnimationCycleEnd: () => void;
 };
 
-const Lightning = ({ show = false, onShown }: Props) => {
+const Lightning = ({ show = false, onAnimationCycleEnd }: Props) => {
   const [l1, frameRatio, width, height] = useTexture(lightning1);
   const [l2, , ,] = useTexture(lightning2);
   const [l3, , ,] = useTexture(lightning3);
@@ -34,6 +33,7 @@ const Lightning = ({ show = false, onShown }: Props) => {
     },
   ];
 
+  // Place it at the nose of the plane and rotate 90 degrees
   return (
     <>
       {show && (
@@ -43,9 +43,10 @@ const Lightning = ({ show = false, onShown }: Props) => {
             position={[0, 0, CONSTANTS.Z_POSITION.WEAPONS]}
             scale={scale}
             animationFrames={animations}
-            textureRatio={frameRatio / 3.5}
+            textureRatio={frameRatio / 3.5} // Make it longer
             animation={ANIMATION_NAMES.IDLE}
-            animationFrameSpeed={animationFrameSpeed}
+            animationFrameSpeed={CONSTANTS.ANIMATION_SPEED.LIGHTNING}
+            onAnimationCycleEnd={onAnimationCycleEnd}
           />
         </group>
       )}
