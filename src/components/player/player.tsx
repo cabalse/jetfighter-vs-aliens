@@ -53,15 +53,15 @@ const Player = ({
 
   return (
     <group ref={groupRef} position={[0, 0, 0]} rotation={[0, 0, 0]}>
-      <group position={[0, 0, 0]}>
-        <Lightning show={fire} onAnimationCycleEnd={onFired} />
+      <group position={[0, 0, CONSTANTS.Z_POSITION.PLAYER]}>
         <ScreenObject
           dimensions={{ width: width, height: height }}
-          position={[0, 0, CONSTANTS.Z_POSITION.PLAYER]}
+          position={[0, 0, 1]}
           scale={scale}
           texture={jetTexture}
           textureRatio={ratio}
         />
+        <Lightning show={fire} onAnimationCycleEnd={onFired} />
         <Burner />
       </group>
     </group>

@@ -32,7 +32,7 @@ const Burner = () => {
     <group position={[-67, -4, 0]}>
       <AnimatedScreenObject
         dimensions={{ width: width, height: height }}
-        position={[0, 0, CONSTANTS.Z_POSITION.PLAYER]}
+        position={[0, 0, 0.5]}
         scale={scale}
         animationFrames={animations}
         textureRatio={frameRatio}
@@ -41,7 +41,7 @@ const Burner = () => {
       />
       <AnimatedScreenObject
         dimensions={{ width: width, height: height }}
-        position={[0, 8, CONSTANTS.Z_POSITION.PLAYER]}
+        position={[0, 8, 0]}
         scale={scale}
         animationFrames={animations}
         textureRatio={frameRatio}

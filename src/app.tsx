@@ -1,56 +1,105 @@
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useFrame } from "@react-three/fiber";
 import { Suspense, useRef, useState } from "react";
 
-import "./app.css";
 import CONSTANTS from "./constants";
 import Player from "./components/player/player";
 import DetectKeyPress from "./framework/detect-key-press";
 import Background from "./components/background/background";
 import angleToVector from "./utilities/angle-to-vector";
+import PowerBar from "./components/player/power-bar";
+
+import "./app.css";
 
 function App() {
   const ref = useRef<HTMLCanvasElement | null>(null);
-  const [playeControls, setPlayerControls] = useState({
+
+  const [gameState, setGameState] = useState({
     rotateRight: false,
     rotateLeft: false,
     moveForward: false,
     fire: false,
+    score: 0,
+    health: 100,
+    energy: CONSTANTS.PLAYER.MAX_ENERGY,
+    gameOver: false,
   });
+
   const [backgroundMovement, setBackgroundMovement] = useState<{
     x: number;
     y: number;
   }>({ x: 0, y: 0 });
+
+  const turnRight = (value: boolean) => {
+    setGameState((prev) => {
+      const newState = structuredClone(prev);
+      newState.rotateRight = value;
+      return { ...prev, rotateRight: value };
+    });
+  };
+
+  const turnLeft = (value: boolean) => {
+    setGameState((prev) => {
+      const newState = structuredClone(prev);
+      newState.rotateLeft = value;
+      console.log(newState);
+      return { ...prev, rotateLeft: value };
+    });
+  };
+
+  const PlayerFire = () => {
+    setGameState((prev) => {
+      if (prev.energy <= 0) return prev;
+
+      const newState = structuredClone(prev);
+      newState.fire = true;
+      newState.energy = prev.energy - CONSTANTS.PLAYER.ENERGY_PER_SHOT;
+      return newState;
+    });
+  };
+
+  const PlayerFired = () => {
+    setGameState((prev) => {
+      const newState = structuredClone(prev);
+      newState.fire = false;
+      return newState;
+    });
+  };
+
+  // useFrame(({ clock }) => {
+  //   const time = clock.getElapsedTime();
+
+  //   setGameState((prev) => {
+  //     if (prev.energy >= 100) return prev;
+  //     const newState = structuredClone(prev);
+  //     newState.energy = 1 * time;
+  //     return newState;
+  //   });
+  // });
 
   return (
     <>
       <div className="canvas-container">
         <DetectKeyPress
           onKeyPress={(key, value) => {
-            if (key === "a")
-              setPlayerControls((prev) => ({ ...prev, rotateLeft: value }));
-            if (key === "d")
-              setPlayerControls((prev) => ({ ...prev, rotateRight: value }));
-            if (key === "w")
-              setPlayerControls((prev) => ({ ...prev, moveForward: value }));
-            if (key === " ")
-              setPlayerControls((prev) => ({ ...prev, fire: true }));
+            if (key === "a") turnLeft(value);
+            if (key === "d") turnRight(value);
+            if (key === " ") PlayerFire();
           }}
         />
         <Canvas orthographic={true}>
           <Suspense fallback={null}></Suspense>
           <Player
-            rotateLeft={playeControls.rotateLeft}
-            rotateRight={playeControls.rotateRight}
+            rotateLeft={gameState.rotateLeft}
+            rotateRight={gameState.rotateRight}
             onAngleChange={(angle) =>
               setBackgroundMovement(
                 angleToVector(angle, CONSTANTS.MOVEMENT.PLAYER.SPEED)
               )
             }
-            fire={playeControls.fire}
-            onFired={() =>
-              setPlayerControls((prev) => ({ ...prev, fire: false }))
-            }
+            fire={gameState.fire}
+            onFired={PlayerFired}
           />
+          <PowerBar value={gameState.energy} />
           <Background
             movementX={-backgroundMovement.x}
             movementY={-backgroundMovement.y}

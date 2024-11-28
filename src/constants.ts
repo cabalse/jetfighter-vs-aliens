@@ -22,6 +22,10 @@ const CONSTANTS = {
     CLOUDS: 0.1,
     BACKGROUND: 0,
   },
+  PLAYER: {
+    MAX_ENERGY: 100,
+    ENERGY_PER_SHOT: 5,
+  },
 };
 
 export default CONSTANTS;

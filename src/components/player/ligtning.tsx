@@ -37,10 +37,10 @@ const Lightning = ({ show = false, onAnimationCycleEnd }: Props) => {
   return (
     <>
       {show && (
-        <group position={[230, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
+        <group position={[240, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
           <AnimatedScreenObject
             dimensions={{ width: width, height: height }}
-            position={[0, 0, CONSTANTS.Z_POSITION.WEAPONS]}
+            position={[0, 0, 0.5]}
             scale={scale}
             animationFrames={animations}
             textureRatio={frameRatio / 3.5} // Make it longer
