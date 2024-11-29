@@ -24,7 +24,9 @@ const CONSTANTS = {
   },
   PLAYER: {
     MAX_ENERGY: 100,
-    ENERGY_PER_SHOT: 5,
+    ENERGY_PER_SHOT: 25,
+    ENERGY_RELOAD: 10,
+    ENERGY_RELOAD_INTERVAL: 200,
   },
 };
 

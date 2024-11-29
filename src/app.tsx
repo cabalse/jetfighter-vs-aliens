@@ -1,4 +1,4 @@
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas } from "@react-three/fiber";
 import { Suspense, useRef, useState } from "react";
 
 import CONSTANTS from "./constants";
@@ -9,6 +9,7 @@ import angleToVector from "./utilities/angle-to-vector";
 import PowerBar from "./components/player/power-bar";
 
 import "./app.css";
+import useExecuteByInterval from "./hooks/use-execute-by-interval";
 
 function App() {
   const ref = useRef<HTMLCanvasElement | null>(null);
@@ -65,16 +66,16 @@ function App() {
     });
   };
 
-  // useFrame(({ clock }) => {
-  //   const time = clock.getElapsedTime();
-
-  //   setGameState((prev) => {
-  //     if (prev.energy >= 100) return prev;
-  //     const newState = structuredClone(prev);
-  //     newState.energy = 1 * time;
-  //     return newState;
-  //   });
-  // });
+  // Reload Energy
+  useExecuteByInterval(CONSTANTS.PLAYER.ENERGY_RELOAD_INTERVAL, () => {
+    setGameState((prev) => {
+      if (prev.energy >= CONSTANTS.PLAYER.MAX_ENERGY) return prev;
+      const newState = structuredClone(prev);
+      newState.energy = prev.energy + CONSTANTS.PLAYER.ENERGY_RELOAD;
+      if (newState.energy > CONSTANTS.PLAYER.MAX_ENERGY) newState.energy = 100;
+      return newState;
+    });
+  });
 
   return (
     <>
