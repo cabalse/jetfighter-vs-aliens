@@ -7,15 +7,17 @@ import Clouds from "./clouds";
 type Props = {
   movementX: number;
   movementY: number;
+  onMove: (x: number, y: number) => void;
 };
 
-const Background = ({ movementX, movementY }: Props) => {
+const Background = ({ movementX, movementY, onMove }: Props) => {
   const groupRef = useRef<THREE.Group>(null);
 
   useFrame((state, delta) => {
     if (groupRef.current) {
       groupRef.current.position.x += movementX * delta;
       groupRef.current.position.y += movementY * delta;
+      onMove(groupRef.current.position.x, groupRef.current.position.y);
     }
   });
 

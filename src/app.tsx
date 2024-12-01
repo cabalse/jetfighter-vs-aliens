@@ -1,5 +1,5 @@
-import { Canvas } from "@react-three/fiber";
-import { Suspense, useRef, useState } from "react";
+import { Canvas, useThree } from "@react-three/fiber";
+import { Suspense, useEffect, useRef, useState } from "react";
 
 import CONSTANTS from "./constants";
 import Player from "./components/player/player";
@@ -10,6 +10,8 @@ import PowerBar from "./components/player/power-bar";
 
 import "./app.css";
 import useExecuteByInterval from "./hooks/use-execute-by-interval";
+import CenterDirection from "./components/player/center-direction";
+import angleToOrigin from "./utilities/angle-to-origin";
 
 function App() {
   const ref = useRef<HTMLCanvasElement | null>(null);
@@ -29,6 +31,16 @@ function App() {
     x: number;
     y: number;
   }>({ x: 0, y: 0 });
+
+  const [backgroundPosition, setBackgroundPosition] = useState({ x: 0, y: 0 });
+
+  const [directionToCenter, setDirectionToCenter] = useState(0);
+
+  useEffect(() => {
+    setDirectionToCenter(
+      angleToOrigin(backgroundPosition.x, backgroundPosition.y) - Math.PI / 2
+    );
+  }, [backgroundPosition]);
 
   const turnRight = (value: boolean) => {
     setGameState((prev) => {
@@ -87,7 +99,7 @@ function App() {
             if (key === " ") PlayerFire();
           }}
         />
-        <Canvas orthographic={true}>
+        <Canvas orthographic={true} camera={{ zoom: 1, position: [0, 0, 10] }}>
           <Suspense fallback={null}></Suspense>
           <Player
             rotateLeft={gameState.rotateLeft}
@@ -100,10 +112,17 @@ function App() {
             fire={gameState.fire}
             onFired={PlayerFired}
           />
+          <CenterDirection
+            position={[-320, -180, CONSTANTS.Z_POSITION.PLAYER]}
+            angle={directionToCenter}
+          />
           <PowerBar value={gameState.energy} />
           <Background
             movementX={-backgroundMovement.x}
             movementY={-backgroundMovement.y}
+            onMove={(x, y) => {
+              setBackgroundPosition({ x, y });
+            }}
           />
         </Canvas>
       </div>
