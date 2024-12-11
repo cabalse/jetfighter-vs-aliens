@@ -1,4 +1,4 @@
-import { Canvas, useThree } from "@react-three/fiber";
+import { Canvas } from "@react-three/fiber";
 import { Suspense, useEffect, useRef, useState } from "react";
 
 import CONSTANTS from "./constants";
@@ -20,6 +20,7 @@ function App() {
     rotateRight: false,
     rotateLeft: false,
     moveForward: false,
+    action: "moving",
     fire: false,
     score: 0,
     health: 100,
@@ -56,6 +57,42 @@ function App() {
       newState.rotateLeft = value;
       console.log(newState);
       return { ...prev, rotateLeft: value };
+    });
+  };
+
+  const land = () => {
+    setGameState((prev) => {
+      const newState = structuredClone(prev);
+      newState.rotateLeft = false;
+      newState.rotateRight = false;
+      newState.fire = false;
+      newState.action = "landing";
+
+      return newState;
+    });
+  };
+
+  const takeOff = () => {
+    setGameState((prev) => {
+      const newState = structuredClone(prev);
+      newState.rotateLeft = false;
+      newState.rotateRight = false;
+      newState.fire = false;
+      newState.action = "takingOff";
+
+      return newState;
+    });
+  };
+
+  const resetActions = () => {
+    setGameState((prev) => {
+      const newState = structuredClone(prev);
+      newState.rotateLeft = false;
+      newState.rotateRight = false;
+      newState.fire = false;
+      newState.action = "moving";
+
+      return newState;
     });
   };
 
@@ -96,6 +133,8 @@ function App() {
           onKeyPress={(key, value) => {
             if (key === "a") turnLeft(value);
             if (key === "d") turnRight(value);
+            if (key === "l") land();
+            if (key === "t") takeOff();
             if (key === " ") PlayerFire();
           }}
         />
@@ -111,6 +150,8 @@ function App() {
             }
             fire={gameState.fire}
             onFired={PlayerFired}
+            action={gameState.action}
+            onActionEnd={resetActions}
           />
           <CenterDirection
             position={[-320, -180, CONSTANTS.Z_POSITION.PLAYER]}

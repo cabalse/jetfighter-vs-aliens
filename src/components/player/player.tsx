@@ -1,5 +1,5 @@
-import { useFrame } from "@react-three/fiber";
-import { useRef } from "react";
+import { act, useFrame, Vector3 } from "@react-three/fiber";
+import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 
 import useTexture from "../../hooks/use-texture";
@@ -18,6 +18,8 @@ type Props = {
   onAngleChange: (angle: number) => void;
   fire: boolean;
   onFired: () => void;
+  action: string;
+  onActionEnd: () => void;
 };
 
 const Player = ({
@@ -26,9 +28,17 @@ const Player = ({
   onAngleChange,
   fire,
   onFired,
+  action,
+  onActionEnd,
 }: Props) => {
   const groupRef = useRef<THREE.Group>(null);
   const [jetTexture, ratio, width, height] = useTexture(jetFighter);
+  const [groupsScale, setGroupScale] = useState<Vector3>([1, 1, 1]);
+  const [actionState, setActionState] = useState<string>("moving");
+
+  useEffect(() => {
+    setActionState(action);
+  }, [action]);
 
   const reportCurrentAngle = () => {
     if (groupRef.current) {
@@ -40,19 +50,50 @@ const Player = ({
 
   useFrame((state, delta) => {
     if (groupRef.current) {
-      if (rotateRight) {
-        groupRef.current.rotation.z -= CONSTANTS.MOVEMENT.PLAYER.TURN * delta;
-        reportCurrentAngle();
+      if (actionState === "moving") {
+        if (rotateRight) {
+          groupRef.current.rotation.z -= CONSTANTS.MOVEMENT.PLAYER.TURN * delta;
+          reportCurrentAngle();
+        }
+        if (rotateLeft) {
+          groupRef.current.rotation.z += CONSTANTS.MOVEMENT.PLAYER.TURN * delta;
+          reportCurrentAngle();
+        }
       }
-      if (rotateLeft) {
-        groupRef.current.rotation.z += CONSTANTS.MOVEMENT.PLAYER.TURN * delta;
-        reportCurrentAngle();
+      if (actionState === "landing") {
+        setGroupScale((prev: Vector3) => {
+          let newScale = [...prev];
+          if (prev[0] > 0.3) {
+            newScale = [prev[0] - 0.02, prev[0] - 0.02, 1];
+          } else {
+            onActionEnd();
+            setActionState("moving");
+          }
+          return newScale;
+        });
+      }
+      if (actionState === "takingOff") {
+        setGroupScale((prev) => {
+          let newScale = [...prev];
+          if (prev[0] < 1) {
+            newScale = [prev[0] + 0.02, prev[0] + 0.02, 1];
+          } else {
+            onActionEnd();
+            setActionState("moving");
+          }
+          return newScale;
+        });
       }
     }
   });
 
   return (
-    <group ref={groupRef} position={[0, 0, 0]} rotation={[0, 0, 0]}>
+    <group
+      ref={groupRef}
+      scale={groupsScale}
+      position={[0, 0, 0]}
+      rotation={[0, 0, 0]}
+    >
       <group position={[0, 0, CONSTANTS.Z_POSITION.PLAYER]}>
         <ScreenObject
           dimensions={{ width: width, height: height }}
