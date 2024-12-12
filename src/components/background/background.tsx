@@ -3,6 +3,7 @@ import { useMemo, useRef } from "react";
 import * as THREE from "three";
 
 import Clouds from "./clouds";
+import Carrier from "./carrier";
 
 type Props = {
   movementX: number;
@@ -28,6 +29,7 @@ const Background = ({ movementX, movementY, onMove }: Props) => {
   return (
     <group ref={groupRef} position={[0, 0, 0]} rotation={[0, 0, 0]}>
       {clouds}
+      <Carrier />
     </group>
   );
 };

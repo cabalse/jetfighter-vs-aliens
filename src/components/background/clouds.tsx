@@ -59,7 +59,7 @@ const Clouds = () => {
   ];
 
   useEffect(() => {
-    setClouds(generateRandomCoordinates(2000, 2000, 200));
+    setClouds(generateRandomCoordinates(3000, 3000, 400));
   }, []);
 
   return (
