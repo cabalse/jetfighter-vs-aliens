@@ -4,6 +4,7 @@ import * as THREE from "three";
 
 import Clouds from "./clouds";
 import Carrier from "./carrier";
+import Ocean from "./ocean";
 
 type Props = {
   movementX: number;
@@ -27,9 +28,12 @@ const Background = ({ movementX, movementY, onMove }: Props) => {
   }, []);
 
   return (
-    <group ref={groupRef} position={[0, 0, 0]} rotation={[0, 0, 0]}>
-      {clouds}
-      <Carrier />
+    <group>
+      <group ref={groupRef} position={[0, 0, 0]} rotation={[0, 0, 0]}>
+        {clouds}
+        <Carrier />
+        <Ocean />
+      </group>
     </group>
   );
 };

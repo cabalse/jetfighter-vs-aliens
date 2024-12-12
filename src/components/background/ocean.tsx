@@ -2,20 +2,24 @@ import * as THREE from "three";
 import { useRef } from "react";
 import useTexture from "../../hooks/use-texture";
 
-import carrier from "../../assets/carrier";
+import ocean from "../../assets/ocean";
 import CONSTANTS from "../../constants";
 
-const scale = 70;
+const scale = 10000;
 
-const Carrier = () => {
-  const [texture, ratio, ,] = useTexture(carrier);
+const Ocean = () => {
+  const [texture, ratio, ,] = useTexture(ocean);
   const materialRef = useRef(null);
   const rotationRef = useRef<THREE.Group>(null);
+
+  texture.wrapS = THREE.RepeatWrapping;
+  texture.wrapT = THREE.RepeatWrapping;
+  texture.repeat.set(100, 100);
 
   return (
     <group
       ref={rotationRef}
-      position={[0, 0, CONSTANTS.Z_POSITION.BACKGROUND_CARRIER]}
+      position={[0, 0, CONSTANTS.Z_POSITION.BACKGROUND]}
       rotation={[0, 0, 0]}
     >
       <mesh>
@@ -26,4 +30,4 @@ const Carrier = () => {
   );
 };
 
-export default Carrier;
+export default Ocean;

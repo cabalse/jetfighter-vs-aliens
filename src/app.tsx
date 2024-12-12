@@ -7,11 +7,11 @@ import DetectKeyPress from "./framework/detect-key-press";
 import Background from "./components/background/background";
 import angleToVector from "./utilities/angle-to-vector";
 import PowerBar from "./components/player/power-bar";
-
-import "./app.css";
 import useExecuteByInterval from "./hooks/use-execute-by-interval";
 import CenterDirection from "./components/player/center-direction";
 import angleToOrigin from "./utilities/angle-to-origin";
+
+import "./app.css";
 
 function App() {
   const ref = useRef<HTMLCanvasElement | null>(null);

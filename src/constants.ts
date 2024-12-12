@@ -20,6 +20,7 @@ const CONSTANTS = {
     ENEMIES: 0.4,
     WEAPONS: 0.3,
     CLOUDS: 0.1,
+    BACKGROUND_CARRIER: 0.05,
     BACKGROUND: 0,
   },
   PLAYER: {
